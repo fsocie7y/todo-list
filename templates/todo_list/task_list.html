@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Tasks list
+    <a href="{% url 'todo_list:create_task' %}" class="btn btn-primary link-to-page float-right">
+      Create task
+    </a>
+  </h1>
+  <form action="" method="get" class="form-inline">
+      {{ task_search_form|crispy }}
+      <input type="submit" value="🔍✨" class="btn btn-info">
+  </form>
+  {% if task_list %}
+    {% for task in task_list %}
+      <div>
+          <a href="{% url 'todo_list:update-task' pk=task.id %}"
+             class="btn btn-primary btn-sm float-right">Update</a>
+          <a style="margin-right: 5px"
+             href="{% url 'todo_list:delete-task' pk=task.id %}"
+             class="btn btn-danger btn-sm float-right">Delete</a>
+          <h4>
+            {{ task.content }}
+          </h4>
+          <h6>
+              {% if task.is_done %}
+                  <div style="color: limegreen" >Done      <a href="{% url 'todo_list:change-status' pk=task.id %}" class="btn btn-secondary btn-sm">Undo</a></div>
+
+              {% else %}
+                  <div style="color: red" >Not done      <a href="{% url 'todo_list:change-status' pk=task.id %}" class="btn btn-info btn-sm">Complete</a></div>
+              {% endif %}
+          </h6>
+          Created at: {{ task.creation }}
+          <br>
+          Deadline:
+          {% if task.deadline %}{{ task.deadline }}{% else %}this task has not deadline {% endif %}
+          <p>
+              Tags:
+              {% for tag in task.tags.all %}
+                  {{ tag }}
+              {% endfor %}
+          </p>
+
+          <hr>
+
+      </div>
+    {% endfor %}
+
+  {% else %}
+    <p>There are no task in todo list</p>
+  {% endif %}
+{% endblock %}

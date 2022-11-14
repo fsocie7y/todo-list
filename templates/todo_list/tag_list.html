@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Tags list
+    <a href="{% url 'todo_list:create_tag' %}" class="btn btn-primary link-to-page float-right">
+      Create tag
+    </a>
+  </h1>
+  <form action="" method="get" class="form-inline">
+      {{ tag_search_form|crispy }}
+      <input type="submit" value="🔍✨" class="btn btn-info">
+  </form>
+    <br>
+  {% if tag_list %}
+
+  {% for tag in tag_list %}
+      {{ tag.name }}
+      <a href="{% url 'todo_list:update-tag' pk=tag.id %}" class="btn btn-primary btn-sm float-right">Update</a>
+      <a style="margin-right: 5px" href="{% url 'todo_list:delete-tag' pk=tag.id %}" class="btn btn-danger btn-sm float-right">Delete</a>
+      <hr>
+  {% endfor %}
+
+  {% else %}
+    <p>There are no tag in tags list</p>
+  {% endif %}
+{% endblock %}
